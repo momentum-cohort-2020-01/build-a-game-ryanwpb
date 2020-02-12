@@ -13,7 +13,7 @@ class Player {
   draw(screen) {
     screen.beginPath();
     screen.rect(20, 20, 30, 30);
-    screen.fillStyle = "#fff";
+    screen.fillStyle = "#ff5a5f";
     screen.fill();
     screen.closePath();
   }
