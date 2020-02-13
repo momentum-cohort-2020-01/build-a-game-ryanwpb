@@ -29,7 +29,7 @@ class Game {
 class Player {
   constructor(game, gameSize) {
     this.game = game;
-    this.size = { x: 12, y: 12 };
+    this.size = { x: 20, y: 20 };
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 2 };
     // this.center = { x: 50, y: 50 }
     this.keyboarder = Keyboarder;
@@ -58,6 +58,7 @@ function drawRect(screen, body) {
     body.size.x,
     body.size.y
   );
+  screen.fillStyle = "#FF5A5F";
 }
 window.addEventListener("load", function() {
   new Game();
