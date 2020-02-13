@@ -76,9 +76,9 @@ class Enemy {
 
 function addEnemies(game) {
   const enemies = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 15; i++) {
     const x = Math.random() * 500;
-    const y = Math.random() * 500;
+    const y = Math.random() * 700;
     enemies.push(new Enemy(game, { x: x, y: y }));
   }
   return enemies;
