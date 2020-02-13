@@ -54,7 +54,7 @@ class Player {
 function drawRect(screen, body) {
   screen.fillRect(
     body.center.x - body.size.x / 2,
-    body.center.y / 2,
+    body.center.y / 1,
     body.size.x,
     body.size.y
   );
