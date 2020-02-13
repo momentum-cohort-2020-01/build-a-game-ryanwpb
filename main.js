@@ -61,23 +61,26 @@ class Enemy {
     this.center = center;
     this.size = { x: 20, y: 20 };
     this.moveX = 0;
-    this.speedX = 0.2;
+    this.speedX = 0.5;
   }
 
   update() {
     this.center.x += this.speedX;
     this.moveX += this.speedX;
+    if (this.moveX < 0 || this.moveX > 30) {
+      // ... reverse direction of movement.
+      this.speedX = -this.speedX;
+    }
   }
 }
 
 function addEnemies(game) {
   const enemies = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     const x = Math.random() * 500;
     const y = Math.random() * 500;
     enemies.push(new Enemy(game, { x: x, y: y }));
   }
-  console.log("Aghhhh ", enemies);
   return enemies;
 }
 
