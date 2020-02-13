@@ -1,62 +1,64 @@
 class Game {
   constructor() {
-    let canvas = document.querySelector("#canvas");
-    let screen = canvas.getContext("2d");
-    let gameSize = { x: canvas.width, y: canvas.height };
-    this.player = new Player(screen, gameSize);
+    const canvas = document.querySelector("#canvas");
+    const screen = canvas.getContext("2d");
+    const gameSize = { x: canvas.width, y: canvas.height };
+    this.player = new Player(this, gameSize);
 
-    let tick = () => {
-      // Update game state.
+    console.log(this.player);
 
+    const tick = () => {
       this.update();
-      // Draw game bodies.
-      this.player.draw(screen);
-
-      // Queue up the next call to tick with the browser.
+      this.draw(screen, gameSize);
       requestAnimationFrame(tick);
-      console.log("this is a tick");
     };
     tick();
   }
+
   update() {
     this.player.update();
-    console.log("player update is called");
+    console.log("update");
+  }
+
+  draw(screen, gameSize) {
+    screen.clearRect(0, 0, gameSize.x, gameSize.y);
+    drawRect(screen, this.player);
   }
 }
 
 class Player {
-  constructor(screen, gameSize) {
-    this.player = this.draw(screen);
-    this.size = { x: 30, y: 30 };
+  constructor(game, gameSize) {
+    this.game = game;
+    this.size = { x: 12, y: 12 };
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 2 };
-
-    // Create a keyboard object to track button presses.
+    // this.center = { x: 50, y: 50 }
     this.keyboarder = Keyboarder;
   }
 
   update() {
-    console.log("player update outside if statement");
-
+    console.log(this.keyboarder.keyState);
+    console.log("left", this.keyboarder.KEYS.LEFT);
+    console.log("right", this.keyboarder.KEYS.RIGHT);
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
-      console.log("inside left condition player update");
-      this.center.x -= 210;
+      this.center.x -= 2;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
-      this.center.x += 210;
+      this.center.x += 2;
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
+      this.center.y -= 2;
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
+      this.center.y += 2;
     }
-  }
-
-  draw(screen) {
-    screen.fillStyle = "#ff5a5f";
-    screen.fillRect(
-      canvas.width / 2,
-      canvas.height - canvas.height / 8,
-      30,
-      30
-    );
   }
 }
 
+function drawRect(screen, body) {
+  screen.fillRect(
+    body.center.x - body.size.x / 2,
+    body.center.y / 2,
+    body.size.x,
+    body.size.y
+  );
+}
 window.addEventListener("load", function() {
-  game = new Game();
-  console.log(game.player);
+  new Game();
 });
