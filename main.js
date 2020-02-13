@@ -4,9 +4,9 @@ class Game {
     const screen = canvas.getContext("2d");
     const gameSize = { x: canvas.width, y: canvas.height };
     this.player = new Player(this, gameSize);
-    this.enemy = new Enemy(this, gameSize);
-
-    console.log("hello ", this.enemy);
+    this.bodies = [];
+    this.bodies = this.bodies.concat(addEnemies(this));
+    this.bodies = this.bodies.concat(new Player(this, gameSize));
 
     const tick = () => {
       this.update();
@@ -17,13 +17,20 @@ class Game {
   }
 
   update() {
-    this.player.update();
-    console.log("update");
+    for (let i = 0; i < this.bodies.length; i++) {
+      this.bodies[i].update();
+    }
   }
 
   draw(screen, gameSize) {
     screen.clearRect(0, 0, gameSize.x, gameSize.y);
-    drawRect(screen, this.player);
+    for (let i = 0; i < this.bodies.length; i++) {
+      drawRect(screen, this.bodies[i]);
+    }
+  }
+
+  addBody(body) {
+    this.bodies.push(body);
   }
 }
 
@@ -32,14 +39,10 @@ class Player {
     this.game = game;
     this.size = { x: 20, y: 20 };
     this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y * 2 };
-    // this.center = { x: 50, y: 50 }
     this.keyboarder = Keyboarder;
   }
 
   update() {
-    console.log(this.keyboarder.keyState);
-    console.log("left", this.keyboarder.KEYS.LEFT);
-    console.log("right", this.keyboarder.KEYS.RIGHT);
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
       this.center.x -= 2;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
@@ -53,13 +56,29 @@ class Player {
 }
 
 class Enemy {
-  constructor(game) {
+  constructor(game, center) {
     this.game = game;
+    this.center = center;
     this.size = { x: 20, y: 20 };
+    this.moveX = 0;
+    this.speedX = 0.2;
   }
+
   update() {
-    this.enemy.update();
+    this.center.x += this.speedX;
+    this.moveX += this.speedX;
   }
+}
+
+function addEnemies(game) {
+  const enemies = [];
+  for (let i = 0; i < 5; i++) {
+    const x = Math.random() * 500;
+    const y = Math.random() * 500;
+    enemies.push(new Enemy(game, { x: x, y: y }));
+  }
+  console.log("Aghhhh ", enemies);
+  return enemies;
 }
 
 function drawRect(screen, body) {
