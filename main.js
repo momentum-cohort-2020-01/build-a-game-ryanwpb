@@ -21,6 +21,18 @@ class Game {
       this.bodies[i].update();
     }
 
+    let notCollidingWithAnything = b1 => {
+      return (
+        this.bodies.filter(function(b2) {
+          return colliding(b1, b2);
+        }).length === 0
+      );
+    };
+
+    // Throw away bodies that are colliding with something. They
+    // will never be updated or draw again.
+    this.bodies = this.bodies.filter(notCollidingWithAnything);
+
     for (let i = 0; i < this.bodies.length; i++) {
       if (
         this.bodies[i].center.y > 800 ||
@@ -117,6 +129,17 @@ function drawRect(screen, body) {
   );
   screen.fillStyle = "#FF5A5F";
 }
+
+function colliding(b1, b2) {
+  return !(
+    b1 === b2 ||
+    b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
+    b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
+    b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
+    b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
+  );
+}
+
 window.addEventListener("load", function() {
   new Game();
 });
